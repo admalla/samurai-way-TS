@@ -1,20 +1,15 @@
 import React from 'react';
 import Post from "./Post/Post";
+import {PostType} from "../../Redux/State";
 
-type PostType = {
-    id: number
-    message: string
-    like: number
+type PropsType = {
+    posts: Array<PostType>
 }
 
-function MyPosts() {
-    const posts: Array<PostType> = [
-        {id: 1, message: 'hello world', like: 15},
-        {id: 2, message: 'It is my first post', like: 20}
-    ]
+function MyPosts(props: PropsType) {
     return (
         <div>
-            {posts.map(p => {
+            {props.posts.map(p => {
                 return <Post key={p.id} message={p.message} like={p.like}/>
             })}
         </div>

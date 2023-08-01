@@ -1,10 +1,23 @@
-import React from "react";
+import React, {MutableRefObject, useRef} from "react";
 import fon from "../../image/tim-mossholder-C5lWDEm2fQA-unsplash.jpg";
 import s from './Profile.module.css'
 import MyPosts from "./MyPosts/MyPosts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
+import {profilePageType} from "../Redux/State";
 
-function Profile() {
+type PropsType = {
+    state: profilePageType
+    addPost: (text: string) => void
+}
+
+function Profile(props: PropsType) {
+
+    let textareaRef = React.createRef<HTMLTextAreaElement>()
+    const addPostHandler = () => {
+        if(textareaRef.current) {
+            props.addPost(textareaRef.current.value)
+        }
+    }
     return (
         <main>
             <div>
@@ -12,12 +25,12 @@ function Profile() {
             </div>
             <ProfileInfo />
             <div>
-                <textarea />
+                <textarea ref={textareaRef}/>
             </div>
             <div>
-                <button>add post</button>
+                <button onClick={addPostHandler}>add post</button>
             </div>
-            <MyPosts />
+            <MyPosts posts={props.state.posts} />
         </main>
     )
 }
