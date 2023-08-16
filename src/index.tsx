@@ -1,13 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import {store} from "./components/Redux/State";
+import ReactDOM from "react-dom";
 import App from "./App";
-import {addPost, State} from "./components/Redux/State";
 
-ReactDOM.render(
-    <App addPost={addPost} state={State} />,
-  document.getElementById('root')
-);
+let rerenderAllTree = () => {
+    ReactDOM.render(
+        <App store={store} dispatch={store.dispatch.bind(store)} />,
+        document.getElementById('root')
+    );
+}
+
+rerenderAllTree()
+
+store.subscribe(rerenderAllTree)
+
+
 
 
 
