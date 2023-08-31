@@ -5,26 +5,23 @@ import NavBar from "./components/Navbar/NavBar";
 import Profile from "./components/Profile/Profile";
 import Dialogs from "./components/Dialogs/Dialogs";
 import {BrowserRouter, Route} from "react-router-dom";
-import {ActionsType, store, StoreType} from "./components/Redux/State";
+import {Users} from "./components/Users/Users";
 
-type PropsType = {
-    store: StoreType
-    dispatch: (action: ActionsType) => void
-}
-
-function App(props: PropsType) {
+function App() {
     return (
         <BrowserRouter>
             <div className="App">
                 <Header/>
                 <NavBar/>
                 <div className="App-content">
-                    <Route path='/profile' render={() => <Profile
-                        dispatch={props.dispatch}
-                        state={props.store.getState().profilePage}
-                    />}
+                    <Route path='/profile' render={() => <Profile />}
                     />
-                    <Route path='/dialogs' render={() => <Dialogs state={props.store.getState().dialogsPage}/>} />
+                    <Route path='/dialogs' render={() =>
+                        <Dialogs />}
+                    />
+                    <Route path='/users' render={() =>
+                        <Users />}
+                    />
                 </div>
             </div>
         </BrowserRouter>

@@ -1,25 +1,38 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import s from './Dialogs.module.css'
 import {DialogItem} from "./DialogItem/DialogItem";
 import {Message} from "./Message/Message";
-import {dialogsPageType} from "../Redux/State";
+import {DialogsPageType, NewMessageBodyAC, SendMessageAC} from "../Redux/dialogs-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {RootStateType} from "../Redux/redux-store";
 
-type PropsType = {
-    state: dialogsPageType
-}
+function Dialogs() {
+    const dispatch = useDispatch()
+    const state = useSelector<RootStateType, DialogsPageType>(state => state.dialogs)
 
-function Dialogs(props: PropsType) {
+    const onChangeTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        dispatch(NewMessageBodyAC(e.currentTarget.value))
+    }
+    const onClickButton = () => {
+        dispatch(SendMessageAC())
+    }
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsItems}>
-                {props.state.dialogs.map(d => {
-                    return <DialogItem key={d.id} name={d.name} id={d.id} />
+                {state.dialogs.map(d => {
+                    return <DialogItem key={d.id} name={d.name} id={d.id}/>
                 })}
             </div>
             <div className={s.messages}>
-                {props.state.messages.map(m => {
-                    return <Message id={m.id} message={m.message} key={m.id} />
-                })}
+                <div>
+                    {state.messages.map(m => {
+                        return <Message id={m.id} message={m.message} key={m.id}/>
+                    })}
+                </div>
+                <div>
+                    <div><textarea value={state.newMessageBody} onChange={onChangeTextarea} /></div>
+                    <div> <button onClick={onClickButton} >send</button> </div>
+                </div>
             </div>
         </div>
     )

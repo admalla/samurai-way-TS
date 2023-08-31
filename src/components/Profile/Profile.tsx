@@ -3,21 +3,21 @@ import fon from "../../image/tim-mossholder-C5lWDEm2fQA-unsplash.jpg";
 import s from './Profile.module.css'
 import MyPosts from "./MyPosts/MyPosts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
-import {ActionsType, AddNewTextAC, AddPostAC, profilePageType} from "../Redux/State";
+import {AddNewTextAC, AddPostAC, ProfilePageType} from "../Redux/profile-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {RootStateType} from "../Redux/redux-store";
 
-type PropsType = {
-    state: profilePageType
-    dispatch: (action: ActionsType) => void
-}
+function Profile() {
+    const dispatch = useDispatch()
+    const state = useSelector<RootStateType, ProfilePageType>(state => state.profile)
 
-function Profile(props: PropsType) {
 
     const addPostHandler = () => {
-        props.dispatch(AddPostAC(props.state.valueTextarea))
+        dispatch(AddPostAC(state.valueTextarea))
     }
 
     const onChangeTextValue = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        props.dispatch(AddNewTextAC(e.currentTarget.value))
+        dispatch(AddNewTextAC(e.currentTarget.value))
     }
     return (
         <main>
@@ -27,14 +27,14 @@ function Profile(props: PropsType) {
             <ProfileInfo />
             <div>
                 <textarea
-                    value={props.state.valueTextarea}
+                    value={state.valueTextarea}
                     onChange={onChangeTextValue}
                 />
             </div>
             <div>
                 <button onClick={addPostHandler}>add post</button>
             </div>
-            <MyPosts posts={props.state.posts} />
+            <MyPosts posts={state.posts} />
         </main>
     )
 }

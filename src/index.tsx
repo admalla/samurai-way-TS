@@ -1,11 +1,17 @@
-import {store} from "./components/Redux/State";
+import {store} from "./components/Redux/redux-store";
 import ReactDOM from "react-dom";
 import App from "./App";
+import {Provider} from "react-redux";
+import {StrictMode} from "react";
 
 let rerenderAllTree = () => {
     ReactDOM.render(
-        <App store={store} dispatch={store.dispatch.bind(store)} />,
-        document.getElementById('root')
+        <StrictMode>
+                    <Provider store={store}>
+                        <App />
+                    </Provider>
+                </StrictMode>,
+        document.getElementById('root') as HTMLElement
     );
 }
 
