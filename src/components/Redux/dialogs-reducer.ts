@@ -1,5 +1,3 @@
-import {ActionsType} from "./State";
-
 const NEW_MESSAGE_BODY = "NEW-MESSAGE-BODY"
 const SEND_MESSAGE = "SEND-MESSAGE"
 
@@ -26,6 +24,8 @@ export type DialogsPageType = {
     messages: MessageObjectType[]
     newMessageBody: string
 }
+
+export type ActionsType = NewMessageBodyAT | SendMessageAT
 
 const initialState: DialogsPageType = {
     dialogs: [

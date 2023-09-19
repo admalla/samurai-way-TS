@@ -1,16 +1,22 @@
-import React, {ChangeEvent, MutableRefObject, useRef} from "react";
+import React, {ChangeEvent, MutableRefObject, useEffect, useRef} from "react";
 import fon from "../../image/tim-mossholder-C5lWDEm2fQA-unsplash.jpg";
 import s from './Profile.module.css'
 import MyPosts from "./MyPosts/MyPosts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
-import {AddNewTextAC, AddPostAC, ProfilePageType} from "../Redux/profile-reducer";
+import {AddNewTextAC, AddPostAC, ProfilePageType, setUserProfileAC} from "../Redux/profile-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../Redux/redux-store";
+import {usersAPI} from "../../API/api";
 
-function Profile() {
+function Profile(props: any) {
     const dispatch = useDispatch()
     const state = useSelector<RootStateType, ProfilePageType>(state => state.profile)
 
+    useEffect(() => {
+      usersAPI.getProfile(+props.match.params.id).then(res => {
+          dispatch(setUserProfileAC(res.data))
+      })
+    }, []);
 
     const addPostHandler = () => {
         dispatch(AddPostAC(state.valueTextarea))

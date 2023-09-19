@@ -1,34 +1,50 @@
-import {ActionsType} from "./State";
-
 const ADD_POST = "ADD-POST";
 const ADD_NEW_TEXT = "ADD-NEW-TEXT"
-
-export type AddPostAT = {
-    type: typeof ADD_POST
-    message: string
-}
-export type AddNewTextAT = {
-    type: typeof ADD_NEW_TEXT
-    newText: string
-}
-
+const SET_USER_PROFILE = "SET_USER_PROFILE"
 
 export type PostType = {
     id: number
     message: string
     like: number
 }
+type UserProfileContactsType = {
+    github: string
+    vk: string
+    facebook: string
+    instagram: string
+    twitter: string
+    website: string
+    youtube: string
+    mainLink: string
+}
+type UserProfileType = {
+    userId: number
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
+    fullName: string
+    contacts: UserProfileContactsType
+    photos: { small: string, large: string }
+
+
+}
 export type ProfilePageType = {
     posts: PostType[]
     valueTextarea: string
+    profile: UserProfileType | null
 }
+
+export type ActionsType =
+    | ReturnType<typeof AddPostAC>
+    | ReturnType<typeof AddNewTextAC>
+    | ReturnType<typeof setUserProfileAC>
 
 const initialState: ProfilePageType = {
     posts: [
         {id: 1, message: 'hello world', like: 15},
         {id: 2, message: 'It is my first post', like: 20}
     ],
-    valueTextarea: ''
+    valueTextarea: '',
+    profile: null
 }
 
 export const ProfileReducer = (state: ProfilePageType = initialState, action: ActionsType): ProfilePageType => {
@@ -42,19 +58,29 @@ export const ProfileReducer = (state: ProfilePageType = initialState, action: Ac
             state.posts.push(newPost)
             state.valueTextarea = ''
             return state
-        case ADD_NEW_TEXT:
+        case ADD_NEW_TEXT: {
             state.valueTextarea = action.newText
             return state
+        }
+        case SET_USER_PROFILE:
+            return {
+                ...state,
+                profile: action.profile
+            }
         default:
             return state
     }
 }
 
-export const AddPostAC = (message: string): AddPostAT => ({
+export const AddPostAC = (message: string) => ({
     type: ADD_POST,
     message
 } as const)
-export const AddNewTextAC = (newText: string): AddNewTextAT => ({
+export const AddNewTextAC = (newText: string) => ({
     type: ADD_NEW_TEXT,
     newText
+} as const)
+export const setUserProfileAC = (profile: UserProfileType) => ({
+    type: SET_USER_PROFILE,
+    profile
 } as const)

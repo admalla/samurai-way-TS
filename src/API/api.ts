@@ -20,5 +20,8 @@ export const usersAPI = {
     },
     isFollowed(userId: number) {
         return instance.get(`follow/${userId}`)
+    },
+    getProfile(userId: number) {
+        return instance.get(`/profile/${userId}`)
     }
 };

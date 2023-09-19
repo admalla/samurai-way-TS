@@ -1,5 +1,6 @@
 import avaUser from '../../../image/user-5.png'
 import s from './User.module.css'
+import {NavLink} from "react-router-dom";
 
 type propsUserType = {
     userId: number
@@ -24,7 +25,9 @@ export function User(
     return <div className={s.user}>
         <div>
             <div>
-                <img className={s.img} src={photos.small ? photos.small : avaUser}/>
+                <NavLink to={'/profile/' + userId} >
+                    <img className={s.img} src={photos.small ? photos.small : avaUser}/>
+                </NavLink>
             </div>
             {
                 isFollowed
