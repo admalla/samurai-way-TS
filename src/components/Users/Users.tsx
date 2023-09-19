@@ -1,61 +1,86 @@
-import {useEffect} from "react";
+import React, {useCallback, useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {followAC, getUsersAC, unfollowAC, UserType} from "../Redux/users-reducer";
-import axios from "axios";
-import s from './User/User.module.css'
-
+import {
+    followAC,
+    getCurrentPageAC, getPageSizeAC,
+    getTotalCountUsersAC,
+    getUsersAC, isLoadingAC,
+    unfollowAC,
+    UserType
+} from "../Redux/users-reducer";
 import {RootStateType} from "../Redux/redux-store";
 import {User} from "./User/User";
 import {usersAPI} from "../../API/api";
+import type {PaginationProps} from 'antd';
+import {Pagination} from 'antd';
+import Preloader from "../common/Preloader/Preloader";
 
-export const Users = () => {
+
+export const Users = React.memo(() => {
 
     const dispatch = useDispatch()
     const users = useSelector<RootStateType, UserType[]>(state => state.users.items)
+    const totalCount = useSelector<RootStateType, number>(state => state.users.totalCount)
+    const pageSize = useSelector<RootStateType, number>(state => state.users.pageSize)
+    const currentPage = useSelector<RootStateType, number>(state => state.users.currentPage)
+    const isFetching = useSelector<RootStateType, boolean>(state => state.users.isFetching)
+
 
     useEffect(() => {
+        dispatch(isLoadingAC(true))
         try {
-            axios.get('https://social-network.samuraijs.com/api/1.0/users').then((res) => {
-                dispatch(getUsersAC(res.data))
+            usersAPI.getUsers(pageSize, currentPage).then((res) => {
+                dispatch(getUsersAC(res.data.items))
+                dispatch(getTotalCountUsersAC(res.data.totalCount))
+                dispatch(isLoadingAC(false))
             })
         } catch (e) {
-            console.log(e)
+            throw new Error(`${e}`)
         }
-        },[])
+    }, [pageSize, currentPage])
 
-        const onClickFollow = (userId: number) => {
-            dispatch(followAC(userId))
-            // try {
-            //     axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`, {}, {
-            //         withCredentials: true,
-            //         headers: {
-            //             'API-KEY': '96621b9e-66da-4457-bd2c-0cd5eeae0e5a',
-            //         }
-            //     }).then((res) => {
-            //         console.log(res)
-            //     })
-            // } catch (err) {
-            //     console.log(err)
-            // }
-        }
+    const onChange: PaginationProps['onChange'] = (pageNumber, pageSize) => {
+        dispatch(getPageSizeAC(pageSize))
+        dispatch(getCurrentPageAC(pageNumber))
+    };
 
-        const onClickUnfollow = (userId: number) => {
-        dispatch(unfollowAC(userId))
-        }
-
-        return <div>
-            {users.map(user => {
-                return <User
-                    userId={user.id}
-                    key={user.id}
-                    name={user.name}
-                    isFollowed={user.followed}
-                    photos={user.photos}
-                    status={user.status}
-                    onClickFollow={onClickFollow}
-                    onClickUnfollow={onClickUnfollow}
-                />
+    const onClickFollow = useCallback((userId: number) => {
+        try {
+            usersAPI.getFollow(userId).then(res => console.log(res))
+            usersAPI.isFollowed(userId).then(res => {
+                dispatch(followAC(userId, res.data))
             })
-            }
-        </div>
-    }
+        } catch (err) {
+            console.log(err)
+        }
+    }, [followAC])
+
+    const onClickUnfollow = useCallback((userId: number) => {
+        try {
+            usersAPI.getUnfollow(userId).then(res => console.log(res))
+            usersAPI.isFollowed(userId).then(res => {
+                dispatch(unfollowAC(userId, res.data))
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }, [unfollowAC])
+
+    return <div>
+        <Pagination showQuickJumper defaultCurrent={currentPage} total={totalCount} onChange={onChange}/>
+        {isFetching && <Preloader/>}
+        {users.map(user => {
+            return <User
+                userId={user.id}
+                key={user.id}
+                name={user.name}
+                isFollowed={user.followed}
+                photos={user.photos}
+                status={user.status}
+                onClickFollow={onClickFollow}
+                onClickUnfollow={onClickUnfollow}
+            />
+        })
+        }
+    </div>
+})

@@ -3,6 +3,10 @@
     background: blue;
     padding: 20px;
 }
+.nav div {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
 
 .nav a {
     color: white;
