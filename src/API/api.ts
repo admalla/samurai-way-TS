@@ -22,6 +22,9 @@ export const usersAPI = {
         return instance.get(`follow/${userId}`)
     },
     getProfile(userId: number) {
-        return instance.get(`/profile/${userId}`)
+        return instance.get(`profile/${userId}`)
+    },
+    getAuthUser(){
+        return instance.get('auth/me')
     }
 };

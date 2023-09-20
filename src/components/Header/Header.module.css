@@ -1,6 +1,8 @@
 .header {
     grid-area: h;
     background: greenyellow;
+    display: flex;
+    justify-content: space-between;
 }
 
 .header img {
