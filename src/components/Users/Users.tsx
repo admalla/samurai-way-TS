@@ -4,7 +4,7 @@ import {
     followAC,
     getCurrentPageAC, getPageSizeAC,
     getTotalCountUsersAC,
-    getUsersAC, isLoadingAC,
+    getUsersAC, isDisabledBtnAC, isLoadingAC,
     unfollowAC,
     UserType
 } from "../Redux/users-reducer";
@@ -14,6 +14,7 @@ import {usersAPI} from "../../API/api";
 import type {PaginationProps} from 'antd';
 import {Pagination} from 'antd';
 import Preloader from "../common/Preloader/Preloader";
+import {isAxiosError} from "axios";
 
 
 export const Users = React.memo(() => {
@@ -24,6 +25,7 @@ export const Users = React.memo(() => {
     const pageSize = useSelector<RootStateType, number>(state => state.users.pageSize)
     const currentPage = useSelector<RootStateType, number>(state => state.users.currentPage)
     const isFetching = useSelector<RootStateType, boolean>(state => state.users.isFetching)
+    const isDisabledBtn = useSelector<RootStateType, number[]>(state => state.users.isDisabledBtn)
 
 
     useEffect(() => {
@@ -44,25 +46,43 @@ export const Users = React.memo(() => {
         dispatch(getCurrentPageAC(pageNumber))
     };
 
-    const onClickFollow = useCallback((userId: number) => {
+    const onClickFollow = useCallback(async (userId: number) => {
+        dispatch(isDisabledBtnAC(true, userId))
         try {
-            usersAPI.getFollow(userId).then(res => console.log(res))
-            usersAPI.isFollowed(userId).then(res => {
+           await usersAPI.getFollow(userId)
+           await usersAPI.isFollowed(userId).then(res => {
                 dispatch(followAC(userId, res.data))
             })
         } catch (err) {
-            console.log(err)
+            let errorMessage = ''
+            if(isAxiosError(err)) {
+                errorMessage = err.response ? err.response.data.messages[0] : err.message
+            } else {
+                errorMessage = (err as Error).message
+            }
+            console.log(errorMessage)
+        } finally {
+            dispatch(isDisabledBtnAC(false, userId))
         }
     }, [followAC])
 
-    const onClickUnfollow = useCallback((userId: number) => {
+    const onClickUnfollow = useCallback(async (userId: number) => {
+        dispatch(isDisabledBtnAC(true, userId))
         try {
-            usersAPI.getUnfollow(userId).then(res => console.log(res))
-            usersAPI.isFollowed(userId).then(res => {
+            await usersAPI.getUnfollow(userId)
+            await usersAPI.isFollowed(userId).then(res => {
                 dispatch(unfollowAC(userId, res.data))
             })
         } catch (err) {
-            console.log(err)
+            let errorMessage = ''
+            if(isAxiosError(err)) {
+                errorMessage = err.response ? err.response.data.messages[0] : err.message
+            } else {
+                errorMessage = (err as Error).message
+            }
+            console.log(errorMessage)
+        } finally {
+            dispatch(isDisabledBtnAC(false, userId))
         }
     }, [unfollowAC])
 
@@ -75,6 +95,7 @@ export const Users = React.memo(() => {
                 key={user.id}
                 name={user.name}
                 isFollowed={user.followed}
+                isDisabledBtn={isDisabledBtn}
                 photos={user.photos}
                 status={user.status}
                 onClickFollow={onClickFollow}

@@ -7,6 +7,7 @@ const GET_TOTAL_COUNT = "GET_TOTAL_COUNT"
 const CURRENT_PAGE = "CURRENT_PAGE"
 const PAGE_SIZE = "PAGE_SIZE"
 const IS_FETCHING = "IS_FETCHING"
+const IS_DISABLED_BTN = "IS_DISABLED_BTN"
 
 export type UserType = {
     name: string
@@ -24,6 +25,7 @@ export type UserStateType = {
     totalCount: number
     error: string
     isFetching: boolean
+    isDisabledBtn: number[]
 }
 
 type ActionType =
@@ -34,6 +36,7 @@ type ActionType =
     | ReturnType<typeof getCurrentPageAC>
     | ReturnType<typeof getPageSizeAC>
     | ReturnType<typeof isLoadingAC>
+    | ReturnType<typeof isDisabledBtnAC>
 
 const initialState: UserStateType = {
     items: [],
@@ -41,7 +44,8 @@ const initialState: UserStateType = {
     currentPage: 1,
     totalCount: 0,
     error: '',
-    isFetching: false
+    isFetching: false,
+    isDisabledBtn: []
 }
 
 export const UsersReducer = (state: UserStateType = initialState, action: ActionType): UserStateType => {
@@ -69,17 +73,24 @@ export const UsersReducer = (state: UserStateType = initialState, action: Action
         case FOLLOW :
             return {
                 ...state,
-                items: state.items.map(u => u.id == action.userId ? {...u, followed: !action.isFollowed} : u)
+                items: state.items.map(u => u.id == action.userId ? {...u, followed: action.isFollowed} : u)
             }
         case UNFOLLOW :
             return {
                 ...state,
-                items: state.items.map(u => u.id == action.userId ? {...u, followed: !action.isFollowed} : u)
+                items: state.items.map(u => u.id == action.userId ? {...u, followed: action.isFollowed} : u)
             }
         case IS_FETCHING :
             return {
                 ...state,
                 isFetching: action.isLoad
+            }
+        case IS_DISABLED_BTN:
+            return {
+                ...state,
+                isDisabledBtn: action.isLoad
+                    ? [...state.isDisabledBtn, action.userId]
+                    : state.isDisabledBtn.filter(id => id !== action.userId)
             }
         default:
             return state
@@ -119,4 +130,9 @@ export const unfollowAC = (userId: number, isFollowed: boolean) => ({
 export const isLoadingAC = (isLoad: boolean) => ({
     type: IS_FETCHING,
     isLoad
+} as const)
+export const isDisabledBtnAC = (isLoad: boolean, userId: number) => ({
+    type: IS_DISABLED_BTN,
+    isLoad,
+    userId
 } as const)
