@@ -1,3 +1,7 @@
+import {AppThunk} from "./redux-store";
+import {usersAPI} from "../../API/api";
+import {handleError} from "../common/utils/handle-error";
+
 const ADD_POST = "ADD-POST";
 const ADD_NEW_TEXT = "ADD-NEW-TEXT"
 const SET_USER_PROFILE = "SET_USER_PROFILE"
@@ -20,7 +24,7 @@ type UserProfileContactsType = {
 type UserProfileType = {
     userId: number
     lookingForAJob: boolean
-    lookingForAJobDescription: string
+    lookingForAJobDescription: null
     fullName: string
     contacts: UserProfileContactsType
     photos: { small: string, large: string }
@@ -33,7 +37,7 @@ export type ProfilePageType = {
     profile: UserProfileType | null
 }
 
-export type ActionsType =
+export type ProfileActionsType =
     | ReturnType<typeof AddPostAC>
     | ReturnType<typeof AddNewTextAC>
     | ReturnType<typeof setUserProfileAC>
@@ -47,7 +51,7 @@ const initialState: ProfilePageType = {
     profile: null
 }
 
-export const ProfileReducer = (state: ProfilePageType = initialState, action: ActionsType): ProfilePageType => {
+export const ProfileReducer = (state: ProfilePageType = initialState, action: ProfileActionsType): ProfilePageType => {
     switch (action.type) {
         case ADD_POST:
             const newPost: PostType = {
@@ -72,6 +76,7 @@ export const ProfileReducer = (state: ProfilePageType = initialState, action: Ac
     }
 }
 
+//....actions
 export const AddPostAC = (message: string) => ({
     type: ADD_POST,
     message
@@ -84,3 +89,13 @@ export const setUserProfileAC = (profile: UserProfileType) => ({
     type: SET_USER_PROFILE,
     profile
 } as const)
+
+//....thunks
+export const userProfileTC = (id: number): AppThunk => async dispatch => {
+    try {
+        const res = await usersAPI.getProfile(id)
+        dispatch(setUserProfileAC(res.data))
+    } catch (e) {
+        console.log(handleError(e))
+    }
+}

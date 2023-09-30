@@ -2,13 +2,14 @@ import React, {ChangeEvent} from 'react';
 import s from './Dialogs.module.css'
 import {DialogItem} from "./DialogItem/DialogItem";
 import {Message} from "./Message/Message";
-import {DialogsPageType, NewMessageBodyAC, SendMessageAC} from "../Redux/dialogs-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {RootStateType} from "../Redux/redux-store";
+import {NewMessageBodyAC, SendMessageAC} from "../Redux/dialogs-reducer";
+import {useAppDispatch, useAppSelector} from "../Redux/redux-store";
+import {Navigate} from "react-router-dom";
 
 function Dialogs() {
-    const dispatch = useDispatch()
-    const state = useSelector<RootStateType, DialogsPageType>(state => state.dialogs)
+    const dispatch = useAppDispatch()
+    const state = useAppSelector(state => state.dialogs)
+    const isAuth = useAppSelector(state => state.auth.isAuth)
 
     const onChangeTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => {
         dispatch(NewMessageBodyAC(e.currentTarget.value))
@@ -16,6 +17,11 @@ function Dialogs() {
     const onClickButton = () => {
         dispatch(SendMessageAC())
     }
+
+    if(!isAuth) {
+        return <Navigate to={'/login'} />
+    }
+
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsItems}>

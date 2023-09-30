@@ -25,7 +25,7 @@ export type DialogsPageType = {
     newMessageBody: string
 }
 
-export type ActionsType = NewMessageBodyAT | SendMessageAT
+export type DialogsActionsType = NewMessageBodyAT | SendMessageAT
 
 const initialState: DialogsPageType = {
     dialogs: [
@@ -41,7 +41,7 @@ const initialState: DialogsPageType = {
     newMessageBody: ''
 }
 
-export const DialogsReducer = (state: DialogsPageType = initialState, action: ActionsType): DialogsPageType => {
+export const DialogsReducer = (state: DialogsPageType = initialState, action: DialogsActionsType): DialogsPageType => {
     switch (action.type) {
         case NEW_MESSAGE_BODY:
             state.newMessageBody = action.text

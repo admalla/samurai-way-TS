@@ -5,9 +5,9 @@ import {NavLink} from "react-router-dom";
 function NavBar() {
     return (
         <nav className={s.nav}>
-            <div><NavLink to="/profile" activeClassName={s.active} >Profile</NavLink></div>
-            <div><NavLink to="/dialogs" activeClassName={s.active}>Messages</NavLink></div>
-            <div><NavLink to="/users" activeClassName={s.active}>Users</NavLink></div>
+            <div id={s.profLink}><NavLink to="/profile"  >Profile</NavLink></div>
+            <div id={s.activeLink}><NavLink to="/dialogs" >Messages</NavLink></div>
+            <div id={s.activeLink}><NavLink to="/users" >Users</NavLink></div>
             <div><a href="/news">News</a></div>
             <div><a href="/music">Music</a></div>
             <div><a href="/settings">Settings</a></div>

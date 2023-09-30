@@ -1,4 +1,9 @@
 import {resolveTxt} from "dns";
+import {Dispatch} from "redux";
+import {usersAPI} from "../../API/api";
+import {AppThunk} from "./redux-store";
+import {handleError} from "../common/utils/handle-error";
+import {isAxiosError} from "axios/index";
 
 const GET_USERS = "GET_USERS"
 const FOLLOW = "FOLLOW"
@@ -28,7 +33,7 @@ export type UserStateType = {
     isDisabledBtn: number[]
 }
 
-type ActionType =
+export type UsersActionType =
     | ReturnType<typeof getUsersAC>
     | ReturnType<typeof followAC>
     | ReturnType<typeof unfollowAC>
@@ -48,7 +53,7 @@ const initialState: UserStateType = {
     isDisabledBtn: []
 }
 
-export const UsersReducer = (state: UserStateType = initialState, action: ActionType): UserStateType => {
+export const UsersReducer = (state: UserStateType = initialState, action: UsersActionType): UserStateType => {
     switch (action.type) {
         case GET_USERS :
             return {
@@ -97,6 +102,7 @@ export const UsersReducer = (state: UserStateType = initialState, action: Action
     }
 }
 
+//.....actions
 export const getUsersAC = (users: Array<UserType>) => ({
     type: GET_USERS,
     users
@@ -136,3 +142,40 @@ export const isDisabledBtnAC = (isLoad: boolean, userId: number) => ({
     isLoad,
     userId
 } as const)
+
+//....thunks
+export const getUsersTC = (pageSize: number, currentPage: number): AppThunk => async dispatch => {
+    try {
+        dispatch(isLoadingAC(true))
+        const res = await usersAPI.getUsers(pageSize, currentPage)
+        dispatch(getUsersAC(res.data.items))
+        dispatch(getTotalCountUsersAC(res.data.totalCount))
+        dispatch(isLoadingAC(false))
+    } catch (e) {
+        handleError(e)
+    }
+}
+export const followTC = (userId: number): AppThunk => async dispatch => {
+    try {
+        dispatch(isDisabledBtnAC(true, userId))
+        await usersAPI.getFollow(userId)
+        const res = await usersAPI.isFollowed(userId)
+        dispatch(followAC(userId, res.data))
+    } catch (err) {
+        handleError(err)
+    } finally {
+        dispatch(isDisabledBtnAC(false, userId))
+    }
+}
+export const unfollowTC = (userId: number): AppThunk => async dispatch => {
+    try {
+        dispatch(isDisabledBtnAC(true, userId))
+        await usersAPI.getUnfollow(userId)
+        const res = await usersAPI.isFollowed(userId)
+            dispatch(unfollowAC(userId, res.data))
+    } catch (err) {
+       handleError(err)
+    } finally {
+        dispatch(isDisabledBtnAC(false, userId))
+    }
+}
