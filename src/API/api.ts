@@ -21,10 +21,25 @@ export const usersAPI = {
     isFollowed(userId: number) {
         return instance.get(`follow/${userId}`)
     },
+};
+
+export const ProfileAPI = {
     getProfile(userId: number) {
         return instance.get(`profile/${userId}`)
     },
+    getStatus(userId: number) {
+        return instance.get(`profile/status/${userId}`)
+    },
+    updateStatus(status: string) {
+        return instance.put('profile/status', {status})
+    }
+}
+
+export const AuthAPI = {
     getAuthUser(){
         return instance.get('auth/me')
+    },
+    Login(data:{email: string, password: string, rememberMe: boolean}) {
+        return instance.post('auth/login', {...data, captcha: true})
     }
-};
+}

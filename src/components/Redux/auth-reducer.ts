@@ -1,5 +1,5 @@
 import {AppThunk} from "./redux-store";
-import {usersAPI} from "../../API/api";
+import {AuthAPI} from "../../API/api";
 import {handleError} from "../common/utils/handle-error";
 
 const GET_AUTH = "GET_AUTH"
@@ -8,6 +8,12 @@ export type StateAuthType = {
     email: string
     login: string
     isAuth: boolean
+}
+export type LoginDataType = {
+    email: string,
+    password: string,
+    rememberMe: boolean,
+    captcha?: boolean
 }
 export type AuthActionsType = ReturnType<typeof getAuthUserAC>
 const initialState: StateAuthType = {
@@ -38,7 +44,7 @@ export const getAuthUserAC = (data: { id: number, email: string, login: string }
 //....thunks
 export const authUserTC = (): AppThunk => async dispatch => {
     try {
-        const res = await usersAPI.getAuthUser()
+        const res = await AuthAPI.getAuthUser()
         if(res.data.resultCode === 0) {
             dispatch(getAuthUserAC(res.data.data))
         }else {
@@ -46,5 +52,14 @@ export const authUserTC = (): AppThunk => async dispatch => {
         }
     }catch (e) {
         handleError(e)
+    }
+}
+
+export const loginTC = (values: LoginDataType): AppThunk => async dispatch => {
+    try {
+        const res = await AuthAPI.Login(values)
+        dispatch(authUserTC())
+    } catch (e) {
+        console.log(handleError(e))
     }
 }

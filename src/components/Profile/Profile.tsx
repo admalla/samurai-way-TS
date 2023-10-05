@@ -3,7 +3,7 @@ import fon from "../../image/tim-mossholder-C5lWDEm2fQA-unsplash.jpg";
 import s from './Profile.module.css'
 import MyPosts from "./MyPosts/MyPosts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
-import {AddNewTextAC, AddPostAC, userProfileTC} from "../Redux/profile-reducer";
+import {AddNewTextAC, AddPostAC, getStatusTC, userProfileTC} from "../Redux/profile-reducer";
 import {useAppDispatch, useAppSelector} from "../Redux/redux-store";
 import {useParams, Navigate} from "react-router-dom";
 
@@ -21,6 +21,7 @@ const Profile = () => {
 
     useEffect(() => {
         dispatch(userProfileTC(profileId))
+        dispatch(getStatusTC(profileId))
     }, []);
 
     const addPostHandler = () => {
@@ -47,7 +48,7 @@ const Profile = () => {
                     onChange={onChangeTextValue}
                 />
             </div>
-            <div>
+            <div style={{ marginBottom: " 15px"}}>
                 <button onClick={addPostHandler}>add post</button>
             </div>
             <MyPosts posts={profile.posts} />

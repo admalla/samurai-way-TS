@@ -1,5 +1,5 @@
 import {AppThunk} from "./redux-store";
-import {usersAPI} from "../../API/api";
+import {ProfileAPI} from "../../API/api";
 import {handleError} from "../common/utils/handle-error";
 
 const ADD_POST = "ADD-POST";
@@ -35,12 +35,14 @@ export type ProfilePageType = {
     posts: PostType[]
     valueTextarea: string
     profile: UserProfileType | null
+    status: string
 }
 
 export type ProfileActionsType =
     | ReturnType<typeof AddPostAC>
     | ReturnType<typeof AddNewTextAC>
     | ReturnType<typeof setUserProfileAC>
+    | ReturnType<typeof getStatusAC>
 
 const initialState: ProfilePageType = {
     posts: [
@@ -48,7 +50,8 @@ const initialState: ProfilePageType = {
         {id: 2, message: 'It is my first post', like: 20}
     ],
     valueTextarea: '',
-    profile: null
+    profile: null,
+    status: ''
 }
 
 export const ProfileReducer = (state: ProfilePageType = initialState, action: ProfileActionsType): ProfilePageType => {
@@ -71,6 +74,11 @@ export const ProfileReducer = (state: ProfilePageType = initialState, action: Pr
                 ...state,
                 profile: action.profile
             }
+        case "SET-STATUS":
+            return {
+                ...state,
+                status: action.status
+            }
         default:
             return state
     }
@@ -89,12 +97,29 @@ export const setUserProfileAC = (profile: UserProfileType) => ({
     type: SET_USER_PROFILE,
     profile
 } as const)
+const getStatusAC = (status: string) => ({type: "SET-STATUS" as const, status})
 
 //....thunks
 export const userProfileTC = (id: number): AppThunk => async dispatch => {
     try {
-        const res = await usersAPI.getProfile(id)
+        const res = await ProfileAPI.getProfile(id)
         dispatch(setUserProfileAC(res.data))
+    } catch (e) {
+        console.log(handleError(e))
+    }
+}
+export const getStatusTC = (userId: number): AppThunk => async dispatch => {
+    try {
+        const res = await ProfileAPI.getStatus(userId)
+        dispatch(getStatusAC(res.data))
+    } catch (e) {
+        console.log(handleError(e))
+    }
+}
+export const updateStatusTC = (status: string, userId: number):  AppThunk => async dispatch => {
+    try {
+        const res = await ProfileAPI.updateStatus(status)
+        dispatch(getStatusTC(userId))
     } catch (e) {
         console.log(handleError(e))
     }
