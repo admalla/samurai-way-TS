@@ -1,18 +1,18 @@
 .App {
-    display: grid;
+  display: grid;
 
-    grid-template-areas:
-    'h h'
-    'n m';
+  grid-template-areas:
+    "h h"
+    "n m";
 
-    grid-template-columns: 2fr 10fr;
-    grid-template-rows: 60px 1fr;
-    grid-gap: 10px;
+  grid-template-columns: 2fr 10fr;
+  grid-template-rows: 60px 1fr;
+  grid-gap: 10px;
 
-    padding: 20px;
+  padding: 20px;
 }
 
 .App-content {
-    grid-area: m;
-    background: aqua;
+  grid-area: m;
+  background: aqua;
 }
