@@ -12,14 +12,15 @@ import { useAppDispatch, useAppSelector } from "../Redux/redux-store";
 import { useParams, Navigate } from "react-router-dom";
 import { useFormik } from "formik";
 
+const MY_ID = 21215;
+
 const Profile = () => {
   const dispatch = useAppDispatch();
   const profile = useAppSelector((state) => state.profile);
   const isAuth = useAppSelector((state) => state.auth.isAuth);
 
   let { id } = useParams<"id">();
-  const myId = 21215;
-  const profileId = id ? +id : myId;
+  const profileId = id ? +id : MY_ID;
 
   useEffect(() => {
     dispatch(userProfileTC(profileId));
@@ -41,7 +42,6 @@ const Profile = () => {
     },
     onSubmit: ({ message }) => {
       dispatch(AddPostAC(message));
-      formik.resetForm();
     },
   });
 

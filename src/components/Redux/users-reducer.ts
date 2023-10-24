@@ -1,9 +1,8 @@
-import { resolveTxt } from "dns";
-import { Dispatch } from "redux";
-import { usersAPI } from "../../API/api";
+import { usersAPI } from "API/api";
 import { AppThunk } from "./redux-store";
 import { handleError } from "../common/utils/handle-error";
-import { isAxiosError } from "axios/index";
+import { followUnfollowFlow } from "components/common/utils/followUnfollowFlow";
+import { updateObjectInArray } from "components/common/utils/object-helper";
 
 const GET_USERS = "GET_USERS";
 const FOLLOW = "FOLLOW";
@@ -81,16 +80,16 @@ export const UsersReducer = (
     case FOLLOW:
       return {
         ...state,
-        items: state.items.map((u) =>
-          u.id == action.userId ? { ...u, followed: action.isFollowed } : u,
-        ),
+        items: updateObjectInArray(state.items, action.userId, "id", {
+          followed: action.isFollowed,
+        }),
       };
     case UNFOLLOW:
       return {
         ...state,
-        items: state.items.map((u) =>
-          u.id == action.userId ? { ...u, followed: action.isFollowed } : u,
-        ),
+        items: updateObjectInArray(state.items, action.userId, "id", {
+          followed: action.isFollowed,
+        }),
       };
     case IS_FETCHING:
       return {
@@ -173,28 +172,20 @@ export const getUsersTC =
 export const followTC =
   (userId: number): AppThunk =>
   async (dispatch) => {
-    try {
-      dispatch(isDisabledBtnAC(true, userId));
-      await usersAPI.getFollow(userId);
-      const res = await usersAPI.isFollowed(userId);
-      dispatch(followAC(userId, res.data));
-    } catch (err) {
-      handleError(err);
-    } finally {
-      dispatch(isDisabledBtnAC(false, userId));
-    }
+    await followUnfollowFlow(
+      dispatch,
+      usersAPI.getFollow.bind(usersAPI),
+      userId,
+      followAC,
+    );
   };
 export const unfollowTC =
   (userId: number): AppThunk =>
   async (dispatch) => {
-    try {
-      dispatch(isDisabledBtnAC(true, userId));
-      await usersAPI.getUnfollow(userId);
-      const res = await usersAPI.isFollowed(userId);
-      dispatch(unfollowAC(userId, res.data));
-    } catch (err) {
-      handleError(err);
-    } finally {
-      dispatch(isDisabledBtnAC(false, userId));
-    }
+    await followUnfollowFlow(
+      dispatch,
+      usersAPI.getUnfollow.bind(usersAPI),
+      userId,
+      unfollowAC,
+    );
   };

@@ -48,7 +48,7 @@ export const User = React.memo(
               disabled={isDisabledBtn.some((id) => id === userId)}
               onClick={() => onClickFollow(userId)}
             >
-              follow
+              follow &#10004;
             </button>
           )}
         </div>

@@ -1,5 +1,5 @@
-import { AppThunk } from "./redux-store";
-import { AuthAPI } from "../../API/api";
+import { AppDispatch, AppThunk } from "./redux-store";
+import { AuthAPI } from "API/api";
 import { handleError } from "../common/utils/handle-error";
 
 const GET_AUTH = "GET_AUTH";
@@ -65,22 +65,24 @@ const logOutAC = () =>
   }) as const;
 
 //....thunks
-export const authUserTC = (): AppThunk => async (dispatch) => {
-  try {
-    const res = await AuthAPI.getAuthUser();
-    if (res.data.resultCode === 0) {
-      dispatch(getAuthUserAC(res.data.data));
-    } else {
-      console.log(res.data.messages[0]);
+export const authUserTC = () => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      const res = await AuthAPI.getAuthUser();
+      if (res.data.resultCode === 0) {
+        dispatch(getAuthUserAC(res.data.data));
+      } else {
+        console.log(res.data.messages[0]);
+      }
+    } catch (e) {
+      handleError(e);
     }
-  } catch (e) {
-    handleError(e);
-  }
+  };
 };
 
 export const loginTC =
   (values: LoginDataType): AppThunk =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     try {
       await AuthAPI.Login(values);
       dispatch(authUserTC());
