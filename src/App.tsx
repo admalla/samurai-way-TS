@@ -20,7 +20,6 @@ function App() {
   }, []);
 
   if (!initialized) {
-    debugger;
     return <Preloader />;
   }
 

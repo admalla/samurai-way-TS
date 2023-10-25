@@ -2,8 +2,8 @@ import { AppDispatch, AppThunk } from "./redux-store";
 import { AuthAPI } from "API/api";
 import { handleError } from "../common/utils/handle-error";
 
-const GET_AUTH = "GET_AUTH";
-const LOG_OUT = "LOG_OUT";
+const GET_AUTH = "AUTH/GET_AUTH";
+const LOG_OUT = "AUTH/LOG_OUT";
 
 export type StateAuthType = {
   id: number | null;
@@ -32,13 +32,13 @@ export const AuthReducer = (
   action: AuthActionsType,
 ): StateAuthType => {
   switch (action.type) {
-    case "GET_AUTH":
+    case "AUTH/GET_AUTH":
       return {
         ...state,
         ...action.data,
         isAuth: true,
       };
-    case "LOG_OUT":
+    case "AUTH/LOG_OUT":
       return {
         ...state,
         isAuth: false,
@@ -85,7 +85,7 @@ export const loginTC =
   async (dispatch, getState) => {
     try {
       await AuthAPI.Login(values);
-      dispatch(authUserTC());
+      await dispatch(authUserTC());
     } catch (e) {
       console.log(handleError(e));
     }

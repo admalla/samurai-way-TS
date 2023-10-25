@@ -4,14 +4,14 @@ import { handleError } from "../common/utils/handle-error";
 import { followUnfollowFlow } from "components/common/utils/followUnfollowFlow";
 import { updateObjectInArray } from "components/common/utils/object-helper";
 
-const GET_USERS = "GET_USERS";
-const FOLLOW = "FOLLOW";
-const UNFOLLOW = "UNFOLLOW";
-const GET_TOTAL_COUNT = "GET_TOTAL_COUNT";
-const CURRENT_PAGE = "CURRENT_PAGE";
-const PAGE_SIZE = "PAGE_SIZE";
-const IS_FETCHING = "IS_FETCHING";
-const IS_DISABLED_BTN = "IS_DISABLED_BTN";
+const GET_USERS = "USERS/GET_USERS";
+const FOLLOW = "USERS/FOLLOW";
+const UNFOLLOW = "USERS/UNFOLLOW";
+const GET_TOTAL_COUNT = "USERS/GET_TOTAL_COUNT";
+const CURRENT_PAGE = "USERS/CURRENT_PAGE";
+const PAGE_SIZE = "USERS/PAGE_SIZE";
+const IS_FETCHING = "USERS/IS_FETCHING";
+const IS_DISABLED_BTN = "USERS/IS_DISABLED_BTN";
 
 export type UserType = {
   name: string;

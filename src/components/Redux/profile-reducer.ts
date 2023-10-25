@@ -1,10 +1,11 @@
 import { AppThunk } from "./redux-store";
-import { ProfileAPI } from "../../API/api";
+import { ProfileAPI } from "API/api";
 import { handleError } from "../common/utils/handle-error";
 
-const ADD_POST = "ADD-POST";
-const ADD_NEW_TEXT = "ADD-NEW-TEXT";
-const SET_USER_PROFILE = "SET_USER_PROFILE";
+const ADD_POST = "PROFILE/ADD-POST";
+const ADD_NEW_TEXT = "PROFILE/ADD-NEW-TEXT";
+const SET_USER_PROFILE = "PROFILE/SET_USER_PROFILE";
+const SET_STATUS = "PROFILE/SET-STATUS";
 
 export type PostType = {
   id: number;
@@ -68,7 +69,7 @@ export const ProfileReducer = (
         ...state,
         profile: action.profile,
       };
-    case "SET-STATUS":
+    case SET_STATUS:
       return {
         ...state,
         status: action.status,
@@ -94,10 +95,11 @@ export const setUserProfileAC = (profile: UserProfileType) =>
     type: SET_USER_PROFILE,
     profile,
   }) as const;
-const getStatusAC = (status: string) => ({
-  type: "SET-STATUS" as const,
-  status,
-});
+const getStatusAC = (status: string) =>
+  ({
+    type: SET_STATUS,
+    status,
+  }) as const;
 
 //....thunks
 export const userProfileTC =

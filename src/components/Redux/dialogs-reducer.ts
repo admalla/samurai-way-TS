@@ -1,11 +1,7 @@
-const SEND_MESSAGE = "SEND-MESSAGE";
+const SEND_MESSAGE = "DIALOGS/SEND-MESSAGE";
 
-export type NewMessageBodyAT = {
-  type: "NEW-MESSAGE-BODY";
-  text: string;
-};
 export type SendMessageAT = {
-  type: "SEND-MESSAGE";
+  type: "DIALOGS/SEND-MESSAGE";
   message: string;
 };
 
@@ -23,7 +19,7 @@ export type DialogsPageType = {
   messages: MessageObjectType[];
 };
 
-export type DialogsActionsType = NewMessageBodyAT | SendMessageAT;
+export type DialogsActionsType = SendMessageAT;
 
 const initialState: DialogsPageType = {
   dialogs: [

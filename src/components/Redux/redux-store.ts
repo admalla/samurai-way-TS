@@ -2,6 +2,7 @@ import {
   AnyAction,
   applyMiddleware,
   combineReducers,
+  compose,
   legacy_createStore,
 } from "redux";
 import { ProfileActionsType, ProfileReducer } from "./profile-reducer";
@@ -22,7 +23,12 @@ const rootReducer = combineReducers({
   app: AppReducer,
 });
 
-export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));
+const composeEnhancers =
+  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export const store = legacy_createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(thunk)),
+);
 
 export type AppActionsType =
   | UsersActionType
