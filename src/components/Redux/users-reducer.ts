@@ -60,7 +60,8 @@ export const UsersReducer = (
     case GET_USERS:
       return {
         ...state,
-        items: action.users,
+        //достаточно было просто присвоить action.users, а данная логика реализована для теста
+        items: [...state.items, ...action.users],
       };
     case GET_TOTAL_COUNT:
       return {

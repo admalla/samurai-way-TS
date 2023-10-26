@@ -95,7 +95,7 @@ export const setUserProfileAC = (profile: UserProfileType) =>
     type: SET_USER_PROFILE,
     profile,
   }) as const;
-const getStatusAC = (status: string) =>
+export const getStatusAC = (status: string) =>
   ({
     type: SET_STATUS,
     status,
