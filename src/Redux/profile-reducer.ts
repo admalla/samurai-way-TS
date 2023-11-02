@@ -1,6 +1,6 @@
-import { AppThunk } from "./redux-store";
+import { AppThunk } from "Redux/redux-store";
 import { ProfileAPI } from "API/api";
-import { handleError } from "../common/utils/handle-error";
+import { handleError } from "common/utils/handle-error";
 
 const ADD_POST = "PROFILE/ADD-POST";
 const ADD_NEW_TEXT = "PROFILE/ADD-NEW-TEXT";

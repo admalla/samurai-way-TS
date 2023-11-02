@@ -1,8 +1,8 @@
 import { usersAPI } from "API/api";
-import { AppThunk } from "./redux-store";
-import { handleError } from "../common/utils/handle-error";
-import { followUnfollowFlow } from "components/common/utils/followUnfollowFlow";
-import { updateObjectInArray } from "components/common/utils/object-helper";
+import { AppThunk } from "Redux/redux-store";
+import { handleError } from "common/utils/handle-error";
+import { followUnfollowFlow } from "common/utils/followUnfollowFlow";
+import { updateObjectInArray } from "common/utils/object-helper";
 
 const GET_USERS = "USERS/GET_USERS";
 const FOLLOW = "USERS/FOLLOW";

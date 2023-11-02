@@ -9,12 +9,12 @@ import {
   unfollowAC,
   unfollowTC,
   UserType,
-} from "../Redux/users-reducer";
-import { AppRootState, useAppDispatch } from "../Redux/redux-store";
+} from "../../Redux/users-reducer";
+import { AppRootState, useAppDispatch } from "../../Redux/redux-store";
 import { User } from "./User/User";
 import type { PaginationProps } from "antd";
 import { Pagination } from "antd";
-import Preloader from "../common/Preloader/Preloader";
+import Preloader from "../../common/Preloader/Preloader";
 
 export const Users = React.memo(() => {
   const dispatch = useAppDispatch();

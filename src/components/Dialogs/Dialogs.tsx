@@ -2,11 +2,11 @@ import React from "react";
 import s from "./Dialogs.module.css";
 import { DialogItem } from "./DialogItem/DialogItem";
 import { Message } from "./Message/Message";
-import { SendMessageAC } from "../Redux/dialogs-reducer";
-import { useAppDispatch, useAppSelector } from "../Redux/redux-store";
+import { SendMessageAC } from "../../Redux/dialogs-reducer";
+import { useAppDispatch, useAppSelector } from "../../Redux/redux-store";
 import { Navigate } from "react-router-dom";
 import { useFormik } from "formik";
-import { AddPostAC } from "components/Redux/profile-reducer";
+import { AddPostAC } from "Redux/profile-reducer";
 
 function Dialogs() {
   const dispatch = useAppDispatch();

@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
-import { useAppDispatch, useAppSelector } from "../Redux/redux-store";
-import { loginTC } from "../Redux/auth-reducer";
+import { useAppDispatch, useAppSelector } from "../../Redux/redux-store";
+import { loginTC } from "../../Redux/auth-reducer";
 import { Navigate } from "react-router-dom";
 
 export function Login() {
@@ -32,7 +32,6 @@ export function Login() {
     },
     onSubmit: (values) => {
       dispatch(loginTC(values));
-      formik.resetForm();
     },
   });
 

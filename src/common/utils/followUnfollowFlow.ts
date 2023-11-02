@@ -1,7 +1,7 @@
 import { usersAPI } from "API/api";
-import { handleError } from "components/common/utils/handle-error";
-import { isDisabledBtnAC } from "components/Redux/users-reducer";
-import { AppDispatch } from "components/Redux/redux-store";
+import { handleError } from "common/utils/handle-error";
+import { isDisabledBtnAC } from "Redux/users-reducer";
+import { AppDispatch } from "Redux/redux-store";
 import { AxiosResponse } from "axios";
 
 /**

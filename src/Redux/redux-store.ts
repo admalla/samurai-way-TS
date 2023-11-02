@@ -5,14 +5,14 @@ import {
   compose,
   legacy_createStore,
 } from "redux";
-import { ProfileActionsType, ProfileReducer } from "./profile-reducer";
-import { DialogsActionsType, DialogsReducer } from "./dialogs-reducer";
-import { SidebarActionsType, SidebarReducer } from "./sidebar-reducer";
-import { UsersActionType, UsersReducer } from "./users-reducer";
-import { AuthActionsType, AuthReducer } from "./auth-reducer";
+import { ProfileActionsType, ProfileReducer } from "Redux/profile-reducer";
+import { DialogsActionsType, DialogsReducer } from "Redux/dialogs-reducer";
+import { SidebarActionsType, SidebarReducer } from "Redux/sidebar-reducer";
+import { UsersActionType, UsersReducer } from "Redux/users-reducer";
+import { AuthActionsType, AuthReducer } from "Redux/auth-reducer";
 import thunk, { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { AppReducer } from "components/Redux/app-reducer";
+import { AppReducer } from "Redux/app-reducer";
 
 const rootReducer = combineReducers({
   profile: ProfileReducer,

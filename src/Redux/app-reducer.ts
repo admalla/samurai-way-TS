@@ -1,6 +1,6 @@
-import { AppThunk } from "components/Redux/redux-store";
-import { authUserTC } from "components/Redux/auth-reducer";
-import { handleError } from "components/common/utils/handle-error";
+import { AppThunk } from "Redux/redux-store";
+import { authUserTC } from "Redux/auth-reducer";
+import { handleError } from "common/utils/handle-error";
 
 const initialState = {
   initialized: false,

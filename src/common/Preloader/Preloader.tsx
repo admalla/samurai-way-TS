@@ -1,5 +1,5 @@
 import React from "react";
-import preloader from "./oval.svg";
+import preloader from "common/Preloader/oval.svg";
 
 function Preloader() {
   return (

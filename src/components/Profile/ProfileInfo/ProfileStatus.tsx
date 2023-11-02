@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../Redux/redux-store";
-import { updateStatusTC } from "../../Redux/profile-reducer";
+import { useAppDispatch, useAppSelector } from "../../../Redux/redux-store";
+import { updateStatusTC } from "../../../Redux/profile-reducer";
 
 type PropsType = {
   status: string;

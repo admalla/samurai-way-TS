@@ -3,7 +3,7 @@ import {
   getUsersAC,
   UsersReducer,
   UserStateType,
-} from "components/Redux/users-reducer";
+} from "Redux/users-reducer";
 
 let initialState: UserStateType = {
   items: [],

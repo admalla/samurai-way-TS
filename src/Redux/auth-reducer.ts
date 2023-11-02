@@ -1,6 +1,6 @@
-import { AppDispatch, AppThunk } from "./redux-store";
+import { AppDispatch, AppThunk } from "Redux/redux-store";
 import { AuthAPI } from "API/api";
-import { handleError } from "../common/utils/handle-error";
+import { handleError } from "common/utils/handle-error";
 
 const GET_AUTH = "AUTH/GET_AUTH";
 const LOG_OUT = "AUTH/LOG_OUT";

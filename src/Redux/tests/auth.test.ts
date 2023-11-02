@@ -1,4 +1,4 @@
-import { AuthReducer } from "components/Redux/auth-reducer";
+import { AuthReducer } from "Redux/auth-reducer";
 
 test("User's authentication", () => {
   const initialState = {

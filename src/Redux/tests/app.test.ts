@@ -1,4 +1,4 @@
-import { AppReducer } from "components/Redux/app-reducer";
+import { AppReducer } from "Redux/app-reducer";
 
 test("initialized should be changed", () => {
   const initialState = {

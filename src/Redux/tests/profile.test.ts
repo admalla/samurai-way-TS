@@ -3,7 +3,7 @@ import {
   ProfilePageType,
   ProfileReducer,
   setUserProfileAC,
-} from "components/Redux/profile-reducer";
+} from "Redux/profile-reducer";
 
 let initialState: ProfilePageType = { posts: [], profile: null, status: "" };
 beforeEach(() => {

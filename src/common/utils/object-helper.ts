@@ -1,4 +1,4 @@
-import { UserType } from "components/Redux/users-reducer";
+import { UserType } from "Redux/users-reducer";
 
 /**
  * Обновляет объект в массиве объектов на основе свойства и значения и возвращает новый массив.

@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppSelector } from "../../Redux/redux-store";
+import { useAppSelector } from "../../../Redux/redux-store";
 import img from "../../../image/user-5.png";
 import { ProfileStatus } from "./ProfileStatus";
 

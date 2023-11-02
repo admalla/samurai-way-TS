@@ -7,8 +7,8 @@ import {
   AddPostAC,
   getStatusTC,
   userProfileTC,
-} from "../Redux/profile-reducer";
-import { useAppDispatch, useAppSelector } from "../Redux/redux-store";
+} from "../../Redux/profile-reducer";
+import { useAppDispatch, useAppSelector } from "../../Redux/redux-store";
 import { useParams, Navigate } from "react-router-dom";
 import { useFormik } from "formik";
 
