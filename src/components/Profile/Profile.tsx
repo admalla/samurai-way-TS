@@ -3,12 +3,8 @@ import fon from "../../image/tim-mossholder-C5lWDEm2fQA-unsplash.jpg";
 import s from "./Profile.module.css";
 import MyPosts from "./MyPosts/MyPosts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
-import {
-  AddPostAC,
-  getStatusTC,
-  userProfileTC,
-} from "../../Redux/profile-reducer";
-import { useAppDispatch, useAppSelector } from "../../Redux/redux-store";
+import { AddPostAC, getStatusTC, userProfileTC } from "Redux/profile-reducer";
+import { useAppDispatch, useAppSelector } from "Redux/redux-store";
 import { useParams, Navigate } from "react-router-dom";
 import { useFormik } from "formik";
 
@@ -25,7 +21,7 @@ const Profile = () => {
   useEffect(() => {
     dispatch(userProfileTC(profileId));
     dispatch(getStatusTC(profileId));
-  }, []);
+  }, [id]);
 
   const formik = useFormik({
     initialValues: {
@@ -54,7 +50,7 @@ const Profile = () => {
       <div>
         <img alt={"img"} className={s.fon} src={fon} />
       </div>
-      <ProfileInfo />
+      <ProfileInfo isOwner={!id} />
       <form onSubmit={formik.handleSubmit}>
         <div>
           <textarea {...formik.getFieldProps("message")} />

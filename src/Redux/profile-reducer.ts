@@ -6,6 +6,7 @@ const ADD_POST = "PROFILE/ADD-POST";
 const ADD_NEW_TEXT = "PROFILE/ADD-NEW-TEXT";
 const SET_USER_PROFILE = "PROFILE/SET_USER_PROFILE";
 const SET_STATUS = "PROFILE/SET-STATUS";
+const SAVE_PHOTO = "SAVE_PHOTO";
 
 export type PostType = {
   id: number;
@@ -40,7 +41,8 @@ export type ProfileActionsType =
   | ReturnType<typeof AddPostAC>
   | ReturnType<typeof AddNewTextAC>
   | ReturnType<typeof setUserProfileAC>
-  | ReturnType<typeof getStatusAC>;
+  | ReturnType<typeof getStatusAC>
+  | ReturnType<typeof mainProfilePhotoAC>;
 
 const initialState: ProfilePageType = {
   posts: [
@@ -74,6 +76,13 @@ export const ProfileReducer = (
         ...state,
         status: action.status,
       };
+    case SAVE_PHOTO:
+      return {
+        ...state,
+        profile: state.profile
+          ? { ...state.profile, photos: action.photo }
+          : null,
+      };
     default:
       return state;
   }
@@ -101,6 +110,12 @@ export const getStatusAC = (status: string) =>
     status,
   }) as const;
 
+export const mainProfilePhotoAC = (photo: { small: string; large: string }) =>
+  ({
+    type: SAVE_PHOTO,
+    photo,
+  }) as const;
+
 //....thunks
 export const userProfileTC =
   (id: number): AppThunk =>
@@ -112,6 +127,18 @@ export const userProfileTC =
       console.log(handleError(e));
     }
   };
+
+export const mainProfilePhotoTC =
+  (photo: File): AppThunk =>
+  async (dispatch) => {
+    try {
+      const res = await ProfileAPI.savePhoto(photo);
+      dispatch(mainProfilePhotoAC(res.data.data.photos));
+    } catch (e) {
+      console.log(handleError(e));
+    }
+  };
+
 export const getStatusTC =
   (userId: number): AppThunk =>
   async (dispatch) => {
@@ -122,6 +149,7 @@ export const getStatusTC =
       console.log(handleError(e));
     }
   };
+
 export const updateStatusTC =
   (status: string, userId: number): AppThunk =>
   async (dispatch) => {
