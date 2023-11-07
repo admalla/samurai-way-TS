@@ -1,4 +1,5 @@
 import axios from "axios";
+import { UserProfileType } from "Redux/profile-reducer";
 
 const instance = axios.create({
   withCredentials: true,
@@ -27,6 +28,9 @@ export const ProfileAPI = {
   getProfile(userId: number) {
     return instance.get(`profile/${userId}`);
   },
+  updateProfile(newProfile: UserProfileType) {
+    return instance.put("profile", newProfile);
+  },
   getStatus(userId: number) {
     return instance.get(`profile/status/${userId}`);
   },
@@ -48,10 +52,21 @@ export const AuthAPI = {
   getAuthUser() {
     return instance.get("auth/me");
   },
-  Login(data: { email: string; password: string; rememberMe: boolean }) {
-    return instance.post("auth/login", { ...data, captcha: true });
+  Login(data: {
+    email: string;
+    password: string;
+    rememberMe: boolean;
+    captcha?: string;
+  }) {
+    return instance.post("auth/login", { ...data });
   },
   LogOut() {
     return instance.delete("auth/login");
+  },
+};
+
+export const SecurityAPI = {
+  getCaptcha() {
+    return instance.get("security/get-captcha-url");
   },
 };

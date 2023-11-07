@@ -6,6 +6,7 @@ test("User's authentication", () => {
     email: "",
     login: "",
     isAuth: false,
+    captcha: "",
   };
 
   const action = {
@@ -29,6 +30,7 @@ test("User's logout", () => {
     email: "",
     login: "",
     isAuth: false,
+    captcha: "",
   };
 
   const action = {

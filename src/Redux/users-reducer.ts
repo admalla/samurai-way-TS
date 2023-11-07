@@ -44,7 +44,7 @@ export type UsersActionType =
 
 const initialState: UserStateType = {
   items: [],
-  pageSize: 20,
+  pageSize: 10,
   currentPage: 1,
   totalCount: 0,
   error: "",
@@ -61,7 +61,7 @@ export const UsersReducer = (
       return {
         ...state,
         //достаточно было просто присвоить action.users, а данная логика реализована для теста
-        items: [...state.items, ...action.users],
+        items: action.users,
       };
     case GET_TOTAL_COUNT:
       return {
@@ -170,6 +170,7 @@ export const getUsersTC =
       handleError(e);
     }
   };
+
 export const followTC =
   (userId: number): AppThunk =>
   async (dispatch) => {

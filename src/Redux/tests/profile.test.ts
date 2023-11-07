@@ -34,6 +34,7 @@ test("add post", () => {
 test("set user's profile", () => {
   const profile = {
     userId: 5,
+    aboutMe: "student",
     lookingForAJob: false,
     lookingForAJobDescription: null,
     fullName: "Adam",

@@ -7,13 +7,14 @@ const ADD_NEW_TEXT = "PROFILE/ADD-NEW-TEXT";
 const SET_USER_PROFILE = "PROFILE/SET_USER_PROFILE";
 const SET_STATUS = "PROFILE/SET-STATUS";
 const SAVE_PHOTO = "SAVE_PHOTO";
+const UPDATE_PROFILE = "UPDATE_PROFILE";
 
 export type PostType = {
   id: number;
   message: string;
   like: number;
 };
-type UserProfileContactsType = {
+export type UserProfileContactsType = {
   github: string;
   vk: string;
   facebook: string;
@@ -23,8 +24,9 @@ type UserProfileContactsType = {
   youtube: string;
   mainLink: string;
 };
-type UserProfileType = {
+export type UserProfileType = {
   userId: number;
+  aboutMe: string;
   lookingForAJob: boolean;
   lookingForAJobDescription: null;
   fullName: string;
@@ -42,7 +44,8 @@ export type ProfileActionsType =
   | ReturnType<typeof AddNewTextAC>
   | ReturnType<typeof setUserProfileAC>
   | ReturnType<typeof getStatusAC>
-  | ReturnType<typeof mainProfilePhotoAC>;
+  | ReturnType<typeof mainProfilePhotoAC>
+  | ReturnType<typeof updateProfileAC>;
 
 const initialState: ProfilePageType = {
   posts: [
@@ -70,6 +73,13 @@ export const ProfileReducer = (
       return {
         ...state,
         profile: action.profile,
+      };
+    case UPDATE_PROFILE:
+      return {
+        ...state,
+        profile: state.profile
+          ? { ...state.profile, contacts: action.contacts }
+          : null,
       };
     case SET_STATUS:
       return {
@@ -104,6 +114,13 @@ export const setUserProfileAC = (profile: UserProfileType) =>
     type: SET_USER_PROFILE,
     profile,
   }) as const;
+
+export const updateProfileAC = (contacts: UserProfileContactsType) =>
+  ({
+    type: UPDATE_PROFILE,
+    contacts,
+  }) as const;
+
 export const getStatusAC = (status: string) =>
   ({
     type: SET_STATUS,
@@ -123,6 +140,18 @@ export const userProfileTC =
     try {
       const res = await ProfileAPI.getProfile(id);
       dispatch(setUserProfileAC(res.data));
+    } catch (e) {
+      console.log(handleError(e));
+    }
+  };
+
+export const updateProfileTC =
+  (profile: UserProfileType): AppThunk =>
+  async (dispatch) => {
+    try {
+      const res = await ProfileAPI.updateProfile(profile);
+      dispatch(updateProfileAC(res.data.data.contacts));
+      dispatch(userProfileTC(profile.userId));
     } catch (e) {
       console.log(handleError(e));
     }

@@ -1,31 +1,35 @@
 import { AppDispatch, AppThunk } from "Redux/redux-store";
-import { AuthAPI } from "API/api";
+import { AuthAPI, SecurityAPI } from "API/api";
 import { handleError } from "common/utils/handle-error";
 
 const GET_AUTH = "AUTH/GET_AUTH";
 const LOG_OUT = "AUTH/LOG_OUT";
+const GET_CAPTCHA = "GET_CAPTCHA";
 
 export type StateAuthType = {
   id: number | null;
   email: string;
   login: string;
   isAuth: boolean;
+  captcha: string;
 };
 export type LoginDataType = {
   email: string;
   password: string;
   rememberMe: boolean;
-  captcha?: boolean;
+  captcha?: string;
 };
 export type AuthActionsType =
   | ReturnType<typeof getAuthUserAC>
-  | ReturnType<typeof logOutAC>;
+  | ReturnType<typeof logOutAC>
+  | ReturnType<typeof getCaptchaAC>;
 
 const initialState: StateAuthType = {
   id: null,
   email: "",
   login: "",
   isAuth: false,
+  captcha: "",
 };
 export const AuthReducer = (
   state: StateAuthType = initialState,
@@ -42,6 +46,11 @@ export const AuthReducer = (
       return {
         ...state,
         isAuth: false,
+      };
+    case GET_CAPTCHA:
+      return {
+        ...state,
+        captcha: action.captcha,
       };
     default:
       return state;
@@ -64,6 +73,12 @@ const logOutAC = () =>
     type: LOG_OUT,
   }) as const;
 
+const getCaptchaAC = (captcha: string) =>
+  ({
+    type: GET_CAPTCHA,
+    captcha,
+  }) as const;
+
 //....thunks
 export const authUserTC = () => {
   return async (dispatch: AppDispatch) => {
@@ -84,8 +99,13 @@ export const loginTC =
   (values: LoginDataType): AppThunk =>
   async (dispatch, getState) => {
     try {
-      await AuthAPI.Login(values);
-      await dispatch(authUserTC());
+      const res = await AuthAPI.Login(values);
+      if (res.data.resultCode === 0) {
+        await dispatch(authUserTC());
+      }
+      if (res.data.resultCode === 10) {
+        dispatch(getCaptchaTC());
+      }
     } catch (e) {
       console.log(handleError(e));
     }
@@ -94,6 +114,14 @@ export const logOutTC = (): AppThunk => async (dispatch) => {
   try {
     await AuthAPI.LogOut();
     dispatch(logOutAC());
+  } catch (e) {
+    console.log(handleError(e));
+  }
+};
+export const getCaptchaTC = (): AppThunk => async (dispatch) => {
+  try {
+    const res = await SecurityAPI.getCaptcha();
+    dispatch(getCaptchaAC(res.data.url));
   } catch (e) {
     console.log(handleError(e));
   }

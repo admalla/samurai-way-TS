@@ -6,6 +6,7 @@ import { Navigate } from "react-router-dom";
 
 export function Login() {
   const isAuth = useAppSelector((state) => state.auth.isAuth);
+  const captcha = useAppSelector((state) => state.auth.captcha);
   const dispatch = useAppDispatch();
 
   const formik = useFormik({
@@ -13,6 +14,7 @@ export function Login() {
       email: "",
       password: "",
       rememberMe: false,
+      captcha: "",
     },
     validate: (values) => {
       const errors: FormEmailType = {};
@@ -56,6 +58,12 @@ export function Login() {
         <input type="checkbox" {...formik.getFieldProps("rememberMe")} />{" "}
         Remember me
       </div>
+      {captcha && (
+        <div>
+          <img src={captcha} />
+          <input type={"text"} {...formik.getFieldProps("captcha")} />
+        </div>
+      )}
       <button type="submit">login</button>
     </form>
   );

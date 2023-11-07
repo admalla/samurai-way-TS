@@ -1,13 +1,18 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useAppDispatch, useAppSelector } from "Redux/redux-store";
 import img from "../../../image/user-5.png";
 import { ProfileStatus } from "./ProfileStatus";
 import { mainProfilePhotoTC } from "Redux/profile-reducer";
+import { ProfileDataEditForm } from "components/Profile/ProfileInfo/ProfileDataEditForm";
+import { ProfileDataForm } from "components/Profile/ProfileInfo/ProfileDataForm";
 
 type Props = {
   isOwner: boolean;
 };
+
 function ProfileInfo({ isOwner }: Props) {
+  const [editView, setEditView] = useState(false);
+
   const { profile, status } = useAppSelector((state) => state.profile);
   const dispatch = useAppDispatch();
 
@@ -27,8 +32,13 @@ function ProfileInfo({ isOwner }: Props) {
         status={status}
         userId={profile ? profile.userId : 21215}
       />
-      <div>{profile?.fullName}</div>
-      <div>{profile?.contacts.github}</div>
+      {editView ? (
+        profile && (
+          <ProfileDataEditForm callback={setEditView} profile={profile} />
+        )
+      ) : (
+        <ProfileDataForm callback={setEditView} profile={profile} />
+      )}
     </div>
   );
 }

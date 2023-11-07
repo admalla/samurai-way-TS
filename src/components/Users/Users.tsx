@@ -5,12 +5,13 @@ import {
   followTC,
   getCurrentPageAC,
   getPageSizeAC,
+  getUsersAC,
   getUsersTC,
   unfollowAC,
   unfollowTC,
   UserType,
-} from "../../Redux/users-reducer";
-import { AppRootState, useAppDispatch } from "../../Redux/redux-store";
+} from "Redux/users-reducer";
+import { AppRootState, useAppDispatch } from "Redux/redux-store";
 import { User } from "./User/User";
 import type { PaginationProps } from "antd";
 import { Pagination } from "antd";
@@ -44,6 +45,7 @@ export const Users = React.memo(() => {
   const onChange: PaginationProps["onChange"] = (pageNumber, pageSize) => {
     dispatch(getPageSizeAC(pageSize));
     dispatch(getCurrentPageAC(pageNumber));
+    // dispatch(getUsersTC(pageSize, currentPage));
   };
 
   const onClickFollow = useCallback(
@@ -64,7 +66,7 @@ export const Users = React.memo(() => {
     <div>
       <Pagination
         showQuickJumper
-        defaultCurrent={currentPage}
+        current={currentPage}
         total={totalCount}
         onChange={onChange}
       />
